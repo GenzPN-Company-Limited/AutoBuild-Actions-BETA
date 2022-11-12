@@ -14,17 +14,17 @@ Sysinfo() {
 	TEMP="$(temp_color ${TEMP})"
 	if [ -n "${TARGET_BOOTABLE}" ]
 	then
-		printf "            设备信息:		%-7s ${Div} ${Green}%-12s${White}\n" ${TARGET_PROFILE} ${TARGET_BOOTABLE}
+		printf "            Device Information:		%-7s ${Div} ${Green}%-12s${White}\n" ${TARGET_PROFILE} ${TARGET_BOOTABLE}
 	else
-		[ -n "${TARGET_PROFILE}" ] && printf "            设备信息:		${TARGET_PROFILE}\n"
+		[ -n "${TARGET_PROFILE}" ] && printf "            Device Information:		${TARGET_PROFILE}\n"
 	fi
-	printf "            内核版本:		$(uname -rs | cut -d ' ' -f2)\n"
-	printf "            可用内存:		%-7s ${Div} %s of %s\n" $(free | grep Mem | awk '{a=$7*100/$2;b=$7/1024;c=$2/1024} {printf("%.1fM %.1f%% %.1fM",b,a,c)}')
-	printf "            可用存储:		%-7s ${Div} %s of %s\n" $(df -T '/' | grep -v File | awk '{a=$5*100/$3;b=$5/1024;c=$3/1024} {printf("%.1fM %.1f%% %.1fM",b,a,c)}')
-	[ -n "${TEMP}" ] && printf "            设备温度:		${TEMP}\n"
-	[ -n "${CoreMark}" ] && printf "            性能得分:		${CoreMark}\n"
-	[ -f /proc/uptime ] && printf "            运行时间: 		$(awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=($1%60)} {printf("%d 天 %d 小时 %d 分钟 %d 秒\n",a,b,c,d)}' /proc/uptime)\n"
-	[ -n "${SSH_CONNECTION}" ] && printf "            登录用户:		%-7s ${Div} %s\n" ${LOGNAME} $(echo ${SSH_CONNECTION} | awk '{print $1":"$2}')
+	printf "            Kernel version:		$(uname -rs | cut -d ' ' -f2)\n"
+	printf "            Available memory:		%-7s ${Div} %s of %s\n" $(free | grep Mem | awk '{a=$7*100/$2;b=$7/1024;c=$2/1024} {printf("%.1fM %.1f%% %.1fM",b,a,c)}')
+	printf "            Available storage:		%-7s ${Div} %s of %s\n" $(df -T '/' | grep -v File | awk '{a=$5*100/$3;b=$5/1024;c=$3/1024} {printf("%.1fM %.1f%% %.1fM",b,a,c)}')
+	[ -n "${TEMP}" ] && printf "            Device temperature:		${TEMP}\n"
+	[ -n "${CoreMark}" ] && printf "            Performance score:		${CoreMark}\n"
+	[ -f /proc/uptime ] && printf "            Uptime: 	         	$(awk '{a=$1/86400;b=($1%86400)/3600;c=($1%3600)/60;d=($1%60)} {printf("%d Day %d Hour %d Min %d Sec\n",a,b,c,d)}' /proc/uptime)\n"
+	[ -n "${SSH_CONNECTION}" ] && printf "            Logged in user:		%-7s ${Div} %s\n" ${LOGNAME} $(echo ${SSH_CONNECTION} | awk '{print $1":"$2}')
 	printf "${White}\n"
 }
 
@@ -63,8 +63,8 @@ clear
 Sysinfo
 
 fgrep -sq '/ overlay ro,' /proc/mounts && {
-	printf "${Red}警告: 固件可用空间已满,请尝试清理文件或重新刷写固件!
-      相反地,卸载系统自带软件包对空间清理没有任何帮助; 因此,请尝试卸载用户安装的软件包${White}\n\n"
+	printf "${Red}Warning: The free space of the firmware is full, please try to clean the file or re-flash the firmware!
+      Conversely, uninstalling the system's own software package will not help in space cleanup; therefore, try uninstalling the user-installed software package${White}\n\n"
 }
 
 export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
@@ -95,10 +95,10 @@ esac
 if ( grep -qs '^root::' /etc/shadow && \
      [ -z "$FAILSAFE" ] )
 then
-	echo -e "${Red}            ==================== 警告 ========================
-             当前设备没有为 root 用户设置密码!
-             请使用 "passwd" 指令来设置一个系统密码来提高安全性
-             同时防止未经授权的 SSH 使用 root 非法登录
+	echo -e "${Red}            ==================== Warning ========================
+             The current device does not have a password set for the root user!
+             Please use the "passwd" command to set a system password for increased security
+             At the same time prevent unauthorized SSH use of root to log in illegally
             --------------------------------------------------${White}
 "
 fi

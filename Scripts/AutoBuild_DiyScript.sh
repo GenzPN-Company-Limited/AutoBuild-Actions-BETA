@@ -40,17 +40,11 @@ Firmware_Diy() {
 	# ${BASE_FILES}			OpenWrt 源码目录下的 package/base-files/files 目录
 
 	case "${OP_AUTHOR}/${OP_REPO}:${OP_BRANCH}" in
-	coolsnowwolf/lede:master)
-		cat >> ${Version_File} <<EOF
-sed -i '/check_signature/d' /etc/opkg.conf
-if [ -z "\$(grep "REDIRECT --to-ports 53" /etc/firewall.user 2> /dev/null)" ]
-then
-	echo '# iptables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
-	echo '# iptables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
-	echo '# [ -n "\$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p udp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
-	echo '# [ -n "\$(command -v ip6tables)" ] && ip6tables -t nat -A PREROUTING -p tcp --dport 53 -j REDIRECT --to-ports 53' >> /etc/firewall.user
-fi
-exit 0
+	GenzPN-Company-Limited/lede:master)
+		<<EOF
+		sed -i "s/zh_cn/en/g" package/lean/default-settings/files/zzz-default-settings
+		sed -i "s/+@LUCI_LANG_zh-cn/+@LUCI_LANG_en/g" package/lean/default-settings/Makefile
+		sed -i "s/zh_cn/en/g" feeds/luci/modules/luci-base/root/etc/uci-defaults/luci-base
 EOF
 		sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
 		# sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
