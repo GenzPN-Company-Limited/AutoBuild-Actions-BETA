@@ -6,56 +6,56 @@
 
 name: Redmi AC2100
 
-### 界面控制部分 ( 以下内容请保持不变 )
+### Interface Control Section (Please keep the following content unchanged)
 on:
   repository_dispatch:
   workflow_dispatch:
     inputs:
       Tempoary_IP:
-        description: '固件 IP 地址 [可选]'
+        description: 'Firmware IP Address [Optional]'
         default: ''
       Tempoary_CONFIG:
-        description: '配置文件 [可选]'
+        description: 'Configuration File [Optional]'
         default: ''
       Tempoary_FLAG:
-        description: '固件标签 [可选]'
+        description: 'Firmware Tag [Optional]'
         default: ''
-### 界面控制部分结束 ( 以上内容请保持不变 )
+### End of Interface Control Section (Please keep the above content unchanged)
 
-  ## Git Push 时触发编译(不要删除此行注释)
+  ## Trigger compilation on Git Push (do not delete this comment line)
   #push:
   #  branches: 
   #    - master
   
-  ## 定时触发编译(不要删除此行注释)
+  ## Scheduled Trigger Compilation (do not delete this comment line)
   #schedule:
   #  - cron: 0 8 * * 5
   
-  ## 重新点亮 Star 时触发编译(不要删除此行注释)
+  ## Trigger compilation when Star is re-lit (do not delete this comment line)
   #watch:
   #  types: [started]
 
-### 请按需求修改以下内容
-### 环境变量设置
+### Please modify the following content as needed
+### Environment Variable Settings
 env:
-# 编译时调用的 [.config] 文件名称
+# Name of the [.config] file called during compilation
   CONFIG_FILE: xiaomi_redmi-router-ac2100
-# 源码仓库:分支
+# Source repository: branch
   DEFAULT_SOURCE: coolsnowwolf/lede:master
-# 上传固件到 Github Releases
+# Upload firmware to Github Releases
   UPLOAD_RELEASES: true
-# 上传固件到 Github Artifacts
+# Upload firmware to Github Artifacts
   UPLOAD_ARTIFACTS: false
-# 上传 bin 文件夹到 Github Artifacts
+# Upload bin folder to Github Artifacts
   UPLOAD_BIN_ARTIFACTS: false
-# 删除无用文件以增加编译空间
+# Delete unused files to increase compilation space
   DELETE_USELESS_FILES: true
-# 删除早期的 workflow 任务
+# Delete earlier workflow tasks
   DELETE_OLD_WORKFLOW: false
-# Cache 加速编译
+# Cache accelerate compilation
   CACHE_ACCELERATE: false
-### 结束
-### 请按需求修改以上内容
+### End
+### Please modify the above content as needed
 
 jobs:
   Compile:
@@ -228,34 +228,17 @@ jobs:
         name: ${{ env.CONFIG_FILE }}_bin_${{ env.Compile_Date }}
         path: openwrt/bin
 
-    - name: Upload Firmware to Release
-      uses: svenstaro/upload-release-action@v2
+    - name: Upload Firmware to Releases
+      uses: ncipollo/release-action@v1
       if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: openwrt/bin/Firmware/*
-        file_glob: true
-        tag: AutoUpdate
-        overwrite: true
-        
-    - name: Download Github API
-      if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
-      run: |
-        wget https://api.github.com/repos/${{github.repository}}/releases/tags/AutoUpdate -O API
-        
-    - name: Upload Github API to Release
-      if: env.UPLOAD_RELEASES == 'true' && env.Compile_Result == 'true' && !cancelled()
-      uses: svenstaro/upload-release-action@v2
-      with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: ./API
-        file_glob: true
-        tag: AutoUpdate
-        overwrite: true
-
-    - name: Delete old Workflow Runs
-      uses: GitRML/delete-workflow-runs@main
-      if: env.DELETE_OLD_WORKFLOW == 'true' && !cancelled()
-      with:
-        retain_days: 1
-        keep_minimum_runs: 3
+        allowUpdates: true
+        artifacts: "openwrt/bin/Firmware/*"
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ github.event.inputs.Tempoary_FLAG }}_${{ env.CONFIG_FILE }}
+        tag: ${{ github.event.inputs.Tempoary_FLAG }}_${{ env.CONFIG_FILE }}
+        body: |
+          IP Address: ${{ github.event.inputs.Tempoary_IP }}
+          Date: ${{ env.Display_Date }}
+          AutoBuild-Actions Build Complete!
+        prerelease: true
