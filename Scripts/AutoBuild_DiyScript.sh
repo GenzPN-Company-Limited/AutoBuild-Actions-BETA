@@ -21,10 +21,10 @@ Firmware_Diy_Core() {
     Default_Flag=AUTO
     # Firmware tag (name suffix), suitable for different configuration files, AUTO: [Automatically recognized]
 
-    Default_IP="192.168.1.1"
+    Default_IP="192.168.10.1"
     # Firmware IP address
 
-    Default_Title="Powered by AutoBuild-Actions"
+    Default_Title="Powered by GenzPN AutoBuild-Actions"
     # Additional information displayed on the firmware terminal homepage
 
     Short_Fw_Date=true
@@ -94,19 +94,18 @@ fi
 exit 0
 EOF
         # sed -i "s?/bin/login?/usr/libexec/login.sh?g" ${FEEDS_PKG}/ttyd/files/ttyd.config
-        # sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
+        sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
         # sed -i '/uci commit luci/i\uci set luci.main.mediaurlbase="/luci-static/argon-mod"' $(PKG_Finder d package default-settings)/files/zzz-default-settings
+        sed -i "s/zh_cn/en/g" package/lean/default-settings/files/zzz-default-settings
+        sed -i "s/+@LUCI_LANG_zh-cn/+@LUCI_LANG_en/g" package/lean/default-settings/Makefile
+        sed -i "/po2lmo ./po/zh-cn/default.po/d" package/lean/default-settings/Makefile
 
         rm -r ${FEEDS_LUCI}/luci-theme-argon*
         AddPackage other vernesong OpenClash dev
         AddPackage other jerrykuku luci-app-argon-config master
         AddPackage other fw876 helloworld main
-        AddPackage other sbwml luci-app-mosdns v5
         AddPackage themes jerrykuku luci-theme-argon 18.06
         AddPackage themes thinktip luci-theme-neobird main
-        AddPackage msd_lite ximiTech luci-app-msd_lite main
-        AddPackage msd_lite ximiTech msd_lite main
-        AddPackage iptvhelper riverscn openwrt-iptvhelper master
         rm -r ${WORK}/package/other/helloworld/mosdns
         rm -r ${FEEDS_PKG}/mosdns
         rm -r ${FEEDS_LUCI}/luci-app-mosdns

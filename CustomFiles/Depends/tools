@@ -259,8 +259,8 @@ ENTER() {
 Tools_File=$(cd $(dirname $0);pwd)/$(basename $0)
 Tools_Cache=/tmp/AutoBuild_Tools
 AutoUpdate_File=/bin/AutoUpdate.sh
-Github=https://github.com/GenzPN-Company-Limited/AutoBuild-Actions
-Github_Raw=https://cdn.jsdelivr.net/gh/GenzPN-Company-Limited/AutoBuild-Actions@main
+Github=https://github.com/GenzPN-Company-Limited/AutoBuild-Actions-BETA
+Github_Raw=https://cdn.jsdelivr.net/gh/GenzPN-Company-Limited/AutoBuild-Actions-BETA@main
 
 White="\e[0m"
 Grey="\e[1;30m"

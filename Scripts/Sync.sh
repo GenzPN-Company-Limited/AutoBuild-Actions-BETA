@@ -3,7 +3,7 @@
 # Thanks to 281677160 and TobKed
 
 # 上游仓库与分支, 按需修改
-INPUT_UPSTREAM_REPOSITORY=Hyy2001X/AutoBuild-Actions-BETA
+INPUT_UPSTREAM_REPOSITORY=GenzPN-Company-Limited/AutoBuild-Actions-BETA
 INPUT_UPSTREAM_BRANCH=master
 
 # 需要文件的同步列表, 按需修改
